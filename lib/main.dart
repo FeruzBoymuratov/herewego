@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:herewego/pages/home_page.dart';
+import 'package:herewego/pages/sign_in.dart';
+import 'package:herewego/pages/sign_up.dart';
 
-void main() {
+Future<void> main() async {
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({Key key}) : super(key: key);
 
   // This widget is the root of your application.
   @override
@@ -25,10 +27,12 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: const HomePage(),
+      home: const SignInPage(),
       debugShowCheckedModeBanner: false,
       routes: {
-        HomePage.id:(context) => HomePage(),
+        HomePage.id:(context) => const HomePage(),
+        SignInPage.id:(context) => const SignInPage(),
+        SignUpPage.id:(context) => SignUpPage(),
       },
     );
   }
