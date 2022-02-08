@@ -10,7 +10,7 @@ import 'package:herewego/services/utils_service.dart';
 class SignInPage extends StatefulWidget {
   const SignInPage({Key key}) : super(key: key);
 
-  static final String id = "sign_in";
+  static const String id = "sign_in";
 
   @override
   _SignInPageState createState() => _SignInPageState();
@@ -21,7 +21,7 @@ class _SignInPageState extends State<SignInPage> {
   var emailController = TextEditingController();
   var passwordController = TextEditingController();
 
-  _doLogIn(){
+  _doSignIn(){
     String email = emailController.text.toString().trim();
     String password = passwordController.text.toString().trim();
 
@@ -57,18 +57,19 @@ class _SignInPageState extends State<SignInPage> {
                 controller: passwordController,
                 decoration: InputDecoration(labelText: 'Password', labelStyle: TextStyle(color: Colors.grey, fontWeight: FontWeight.bold)),
               ),
-              FlatButton(onPressed: (){
-                _doLogIn();
-              }, child: Text('Sign In',
+              FlatButton(
+                onPressed: _doSignIn,
+                child: const Text('Sign In',
                 style: TextStyle(color: Colors.white,
                     fontWeight: FontWeight.bold),),
-              color: Colors.red,
+                color: Colors.red,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Text("Don't have an account?", style: TextStyle(fontWeight: FontWeight.bold),),
-                  TextButton(onPressed: (){
+                  TextButton(
+                      onPressed: (){
                     Navigator.pushReplacementNamed(context, SignUpPage.id);
                   },
                       child: Text('Sign Up',
