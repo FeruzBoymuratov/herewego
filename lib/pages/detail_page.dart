@@ -1,7 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:herewego/model/post_model.dart';
 import 'package:herewego/services/prefs_service.dart';
 import 'package:herewego/services/rtdb_service.dart';
+import 'package:herewego/services/store_service.dart';
+import 'package:image_picker/image_picker.dart';
 
 class DetailPage extends StatefulWidget {
   const DetailPage({Key key}) : super(key: key);
@@ -15,7 +19,8 @@ class DetailPage extends StatefulWidget {
 class _DetailPageState extends State<DetailPage> {
 
   var isLoading = false;
-  //File _image;
+  File _image;
+  final picker = ImagePicker();
 
   var fncontroller = TextEditingController();
   var lncontroller = TextEditingController();
@@ -28,26 +33,44 @@ class _DetailPageState extends State<DetailPage> {
     String content = ctcontroller.text.toString();
     String date = decontroller.text.toString();
 
-    var id = await Prefs.loadUserId();
-      RTDBService.addPost(Post(id, fullname, lastname, content, date)).then((response) => {
-        _respAddPost(),
-      });
-
     if (fullname.isEmpty || lastname.isEmpty || content.isEmpty || date.isEmpty) return;
+    if(_image == null) return;
+
+    _apiUploadImage(fullname, lastname, content, date);
   }
 
-  // _apiAddPost(String fullname, String lastname, String content, String date) async {
-  //   var id = await Prefs.loadUserId();
-  //   RTDBService.addPost(Post(id, fullname, lastname, content, date)).then((response) => {
-  //     _respAddPost(),
-  //   });
-  // }
+  void _apiUploadImage(String fullname, String lastname, String content, String date) {
+    setState(() {
+      isLoading = true;
+    });
+    StoreService.uploadImage(_image).then((img_url) => {
+      _apiAddPost(fullname, lastname, content, date, img_url),
+    });
+  }
+  _apiAddPost(String fullname, String lastname, String content, String date, img_url) async {
+    var id = await Prefs.loadUserId();
+    RTDBService.addPost(Post(id, fullname, lastname, content, date, img_url)).then((response) => {
+      _respAddPost(),
+    });
+  }
   
   _respAddPost() {
     setState(() {
       isLoading = false;
     });
     Navigator.of(context).pop({'data': 'done'});
+  }
+
+  Future _getImage() async {
+    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+
+    setState(() {
+      if (pickedFile != null) {
+        _image = File(pickedFile.path);
+      }else{
+        print("Rasm tanlanmagan!");
+      }
+    });
   }
 
   @override
@@ -65,6 +88,19 @@ class _DetailPageState extends State<DetailPage> {
             padding: const EdgeInsets.all(30),
             child: Column(
               children: [
+                GestureDetector(
+                  onTap: _getImage,
+                  child: Container(
+                    width: 100,
+                    height: 100,
+                    child: _image != null ?
+                    Image.file(_image, fit: BoxFit.cover,) :
+                    Image.asset("assets/images/ic_camera.png"),
+                  ),
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
                 TextField(
                   controller: fncontroller,
                   decoration: const InputDecoration(

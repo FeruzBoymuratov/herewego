@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:herewego/model/post_model.dart';
 import 'package:herewego/pages/detail_page.dart';
@@ -97,6 +98,15 @@ class _HomePageState extends State<HomePage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+
+          Container(
+            height: 200,
+            width: double.infinity,
+            child: post.img_url != null ?
+            Image.network(post.img_url, fit: BoxFit.cover,):
+            Image.asset("assets/images/ic_camera.png"),
+          ),
+          SizedBox(height: 10,),
           Row(
             children: [
               Text(post.lastname, style: TextStyle(fontSize: 20),),

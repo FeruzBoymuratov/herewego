@@ -25,7 +25,7 @@ class _SignInPageState extends State<SignInPage> {
     String email = emailController.text.toString().trim();
     String password = passwordController.text.toString().trim();
 
-    if(email.isEmpty || password.isEmpty) return
+    if(email.isEmpty || password.isEmpty) return;
     AuthService.signInUser(context, email, password).then((firebaseUser) => {
       _getFirebaseUser(firebaseUser),
     });

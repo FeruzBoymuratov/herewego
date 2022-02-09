@@ -44,7 +44,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.deepOrange,
       ),
-      home: _startPage(),
+      home: HomePage(),
       debugShowCheckedModeBanner: false,
       routes: {
         HomePage.id:(context) => const HomePage(),
